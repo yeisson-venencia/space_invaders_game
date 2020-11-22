@@ -1,14 +1,11 @@
 import pygame
 from random import randint
 from math import sqrt
-        
-
 pygame.init()
 
 window_size = window_width, window_height = 800, 600
 
 screen = pygame.display.set_mode(window_size)
-print(type(screen))
 
 # Background
 background_color = (0, 19, 26)
@@ -56,14 +53,14 @@ bullet_image_height = bullet_image.get_height()
 
 bullet_position_x = 0
 bullet_position_y = 0
-bullet_y_speed = -4
+bullet_y_speed = -6
 bullet_state =  'READY'
 
 def fire_bullet():
     global bullet_state
     global bullet_position_x
     global bullet_position_y
-    bullet_state =  'READY'
+    bullet_state =  'FIRED'
     bullet_position_x = player_position_x + player_image_with / 2 - bullet_image_with / 2
     bullet_position_y = player_position_y
 
@@ -91,10 +88,10 @@ def draw_bullet(x_position, y_position):
     screen.blit(bullet_image,(x_position,y_position))
 
 def bullet_position():
-    return (bullet_position_x,bullet_position_y)
+    return (bullet_position_x + bullet_image_with/2 ,bullet_position_y + bullet_image_height/2)
 
 def monster_position():
-    return (monster_position_x,monster_position_y)
+    return (monster_position_x + monster_image_with/2 ,monster_position_y + monster_image_height/2)
 
 def distance(point_a, point_b):
     return sqrt((point_a[0] - point_b[0])**2 + (point_a[1] - point_b[1])**2)
@@ -117,7 +114,7 @@ while running:
                 player_right_pace = player_speed
             elif event.key == pygame.K_UP:
                 if bullet_state == 'READY':
-                    fire_bullet()                  
+                    fire_bullet()             
         
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
