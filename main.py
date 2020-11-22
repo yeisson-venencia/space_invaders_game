@@ -1,5 +1,5 @@
 import pygame
-from random import randint
+from random import randint, choice
 from math import sqrt
 pygame.init()
 
@@ -33,18 +33,22 @@ monster_image = pygame.image.load('enemy.png')
 monster_image_with = monster_image.get_width()
 monster_image_height = monster_image.get_height()
 
-monster_position_x = 0
-monster_position_y = 0
-monster_x_speed = 2
+number_monster = 4
+
+monster_position_x = [0 for x in range(number_monster)]
+monster_position_y = [0 for x in range(number_monster)]
+monster_x_speed = [choice([2,-2]) for x in range(number_monster)]
 monster_y_speed = monster_image_height
 
-def reset_monster():
+def reset_monster(index):
     global monster_position_x
     global monster_position_y
-    monster_position_x = randint(0,window_width-monster_image_with)
-    monster_position_y = randint(0,3) * monster_image_height
+    monster_position_x[index] = randint(0,window_width-monster_image_with)
+    monster_position_y[index] = randint(0,3) * monster_image_height
+    monster_x_speed[index] *= -1
 
-reset_monster()
+for i in range(number_monster):
+    reset_monster(i)
 
 # Bullet
 bullet_image = pygame.image.load('bullet.png')
@@ -78,10 +82,10 @@ disappear_bullet()
 left_limit = window_width*0
 right_limit =  window_width*1 - player_image_with
 
-def player(x_position, y_position):
+def draw_player(x_position, y_position):
     screen.blit(player_image,(x_position,y_position))
 
-def monster(x_position, y_position):
+def draw_monster(x_position, y_position):
     screen.blit(monster_image,(x_position,y_position))
 
 def draw_bullet(x_position, y_position):
@@ -90,8 +94,8 @@ def draw_bullet(x_position, y_position):
 def bullet_position():
     return (bullet_position_x + bullet_image_with/2 ,bullet_position_y + bullet_image_height/2)
 
-def monster_position():
-    return (monster_position_x + monster_image_with/2 ,monster_position_y + monster_image_height/2)
+def monster_position(index):
+    return (monster_position_x[index] + monster_image_with/2 ,monster_position_y[index] + monster_image_height/2)
 
 def distance(point_a, point_b):
     return sqrt((point_a[0] - point_b[0])**2 + (point_a[1] - point_b[1])**2)
@@ -121,12 +125,6 @@ while running:
                 player_left_pace = 0
             elif event.key == pygame.K_RIGHT:
                 player_right_pace = 0
-
-    # Monster movement
-    monster_position_x += monster_x_speed
-    if monster_position_x < left_limit or monster_position_x > right_limit:
-        monster_x_speed *= -1
-        monster_position_y += monster_y_speed
     
     # Bullet movement
     if bullet_state == 'FIRED':
@@ -134,11 +132,18 @@ while running:
         if bullet_position_y < 0:
             disappear_bullet()
         draw_bullet(bullet_position_x,bullet_position_y)
-    
-    # Collition
-    if is_collition(monster_position(),bullet_position()):
-        disappear_bullet()
-        reset_monster()
+
+    # Monster movement
+    for i in range(number_monster):
+        monster_position_x[i] += monster_x_speed[i]
+        if monster_position_x[i] < left_limit or monster_position_x[i] > right_limit:
+            monster_x_speed[i] *= -1
+            monster_position_y[i] += monster_y_speed
+        # Collition
+        if is_collition(monster_position(i),bullet_position()):
+            disappear_bullet()
+            reset_monster(i)
+        draw_monster(monster_position_x[i],monster_position_y[i])
 
     # Execute player movement
     player_position_x += player_right_pace - player_left_pace
@@ -147,6 +152,5 @@ while running:
         player_position_x = left_limit
     elif player_position_x > right_limit:
         player_position_x = right_limit 
-    player(player_position_x,player_position_y)
-    monster(monster_position_x,monster_position_y)
+    draw_player(player_position_x,player_position_y)
     pygame.display.update() 
