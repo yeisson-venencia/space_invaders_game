@@ -1,4 +1,5 @@
 import pygame
+from random import randint
 pygame.init()
 
 window_size = window_width, window_height = 800, 600
@@ -31,11 +32,11 @@ monster_image = pygame.image.load('enemy.png')
 monster_image_with = monster_image.get_width()
 monster_image_height = monster_image.get_height()
 
-monster_position_x = (window_width - monster_image_with) // 2
-monster_position_y = int(window_height*0.1) 
+monster_position_x = randint(0,window_width-monster_image_with)
+monster_position_y = randint(0,3) * monster_image_height
 monster_left_pace = 0
 monster_right_pace = 0
-monster_x_speed = 3
+monster_x_speed = 2
 monster_y_speed = monster_image_height
 
 # Bounderies
