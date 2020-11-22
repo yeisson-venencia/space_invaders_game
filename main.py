@@ -24,12 +24,26 @@ player_left_pace = 0
 player_right_pace = 0
 player_speed = 0.3
 
+# Monster
+monster_image = pygame.image.load('monster.png')
+monster_image_with = monster_image.get_width()
+monster_image_height = monster_image.get_height()
+
+monster_position_x = (window_width - monster_image_with) // 2
+monster_position_y = int(window_height*0.1) 
+monster_left_pace = 0
+monster_right_pace = 0
+monster_speed = 0.3
+
 # Bounderies
 left_limit = window_width*0.1
 right_limit =  window_width*0.9 - player_image_with
 
 def player(x_position, y_position):
     screen.blit(player_image,(x_position,y_position))
+
+def monster(x_position, y_position):
+    screen.blit(monster_image,(x_position,y_position))
 
 running = True
 while running:
@@ -59,4 +73,5 @@ while running:
     elif player_position_x > right_limit:
         player_position_x = right_limit 
     player(player_position_x,player_position_y)
+    monster(monster_position_x,monster_position_y)
     pygame.display.update() 
