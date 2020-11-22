@@ -34,10 +34,18 @@ monster_image_height = monster_image.get_height()
 
 monster_position_x = randint(0,window_width-monster_image_with)
 monster_position_y = randint(0,3) * monster_image_height
-monster_left_pace = 0
-monster_right_pace = 0
 monster_x_speed = 2
 monster_y_speed = monster_image_height
+
+# Bullet
+bullet_image = pygame.image.load('bullet.png')
+bullet_image_with = bullet_image.get_width()
+bullet_image_height = bullet_image.get_height()
+
+bullet_position_x = player_position_x
+bullet_position_y = player_position_y
+bullet_y_speed = 0
+bullet_state =  'READY'
 
 # Bounderies
 left_limit = window_width*0
@@ -48,6 +56,9 @@ def player(x_position, y_position):
 
 def monster(x_position, y_position):
     screen.blit(monster_image,(x_position,y_position))
+
+def bullet(x_position, y_position):
+    screen.blit(bullet_image,(x_position,y_position))
 
 running = True
 while running:
@@ -62,6 +73,12 @@ while running:
                 player_left_pace = player_speed
             elif event.key == pygame.K_RIGHT:
                 player_right_pace = player_speed
+            elif event.key == pygame.K_UP:
+                if bullet_state == 'READY':
+                    bullet_state = 'FIRED'
+                    bullet_position_x = player_position_x + player_image_with / 2 - bullet_image_with / 2
+                    bullet_position_y = player_position_y
+                    bullet_y_speed = -4                    
         
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
@@ -69,11 +86,19 @@ while running:
             elif event.key == pygame.K_RIGHT:
                 player_right_pace = 0
 
-    #monster movement
+    # Monster movement
     monster_position_x += monster_x_speed
     if monster_position_x < left_limit or monster_position_x > right_limit:
         monster_x_speed *= -1
         monster_position_y += monster_y_speed
+    
+    # Bullet movement
+    if bullet_state == 'FIRED':
+        bullet_position_y += bullet_y_speed
+        if bullet_position_y < 0:
+            bullet_state = 'READY'
+        bullet(bullet_position_x,bullet_position_y)
+
 
     # Execute player movement
     player_position_x += player_right_pace - player_left_pace
