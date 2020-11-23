@@ -103,6 +103,18 @@ def distance(point_a, point_b):
 def is_collition(invader_position, bullet_position):
     return distance(invader_position,bullet_position) < 20
 
+score = 0
+font = pygame.font.Font('freesansbold.ttf',32)
+score_coordinates = (10,10)
+
+def show_score():
+    score_render = font.render(f'Score : {score}',True,(252, 223, 3))
+    screen.blit(score_render,score_coordinates)
+
+def increase_score():
+    global score
+    score += 1
+
 running = True
 while running:
     screen.fill(background_color)
@@ -143,6 +155,7 @@ while running:
         if is_collition(monster_position(i),bullet_position()):
             disappear_bullet()
             reset_monster(i)
+            increase_score()
         draw_monster(monster_position_x[i],monster_position_y[i])
 
     # Execute player movement
@@ -153,4 +166,5 @@ while running:
     elif player_position_x > right_limit:
         player_position_x = right_limit 
     draw_player(player_position_x,player_position_y)
+    show_score()
     pygame.display.update() 
