@@ -9,16 +9,16 @@ screen = pygame.display.set_mode(window_size)
 
 # Background
 background_color = (0, 19, 26)
-background_image = pygame.image.load('background.png')
+background_image = pygame.image.load('./assets/background.png')
 
 
 # Title and icon
 pygame.display.set_caption('Space Invadors')
-icon = pygame.image.load('ufo.png')
+icon = pygame.image.load('./assets/ufo.png')
 pygame.display.set_icon(icon)
 
 # Player
-player_image = pygame.image.load('player.png')
+player_image = pygame.image.load('./assets/player.png')
 player_image_with = player_image.get_width()
 player_image_height = player_image.get_height()
 
@@ -29,7 +29,7 @@ player_right_pace = 0
 player_speed = 5
 
 # Monster
-monster_image = pygame.image.load('enemy.png')
+monster_image = pygame.image.load('./assets/enemy.png')
 monster_image_with = monster_image.get_width()
 monster_image_height = monster_image.get_height()
 
@@ -51,7 +51,7 @@ for i in range(number_monster):
     reset_monster(i)
 
 # Bullet
-bullet_image = pygame.image.load('bullet.png')
+bullet_image = pygame.image.load('./assets/bullet.png')
 bullet_image_with = bullet_image.get_width()
 bullet_image_height = bullet_image.get_height()
 
