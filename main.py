@@ -165,6 +165,10 @@ while running:
             monster_position_y[i] += monster_y_speed
         # Collition
         if is_collition(monster_position(i),bullet_position()):
+            # Collition sound
+            collition_sound = mixer.Sound('./sounds/explosion.wav')
+            collition_sound.play()
+            # Execute collition
             disappear_bullet()
             reset_monster(i)
             increase_score()
