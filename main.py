@@ -1,16 +1,24 @@
 import pygame
 from random import randint, choice
 from math import sqrt
+from pygame import mixer
+
 pygame.init()
+
+#clock =  pygame.time.Clock()
 
 window_size = window_width, window_height = 800, 600
 
+# Screen
 screen = pygame.display.set_mode(window_size)
 
 # Background
 background_color = (0, 19, 26)
 background_image = pygame.image.load('./assets/background.png')
 
+# Background sound
+mixer.music.load('./sounds/background.wav')
+mixer.music.play()
 
 # Title and icon
 pygame.display.set_caption('Space Invadors')
