@@ -138,6 +138,10 @@ while running:
                 player_right_pace = player_speed
             elif event.key == pygame.K_UP:
                 if bullet_state == 'READY':
+                    # Bullet sound
+                    bullet_sound = mixer.Sound('./sounds/laser.wav')
+                    bullet_sound.play()
+                    #fire bullet
                     fire_bullet()             
         
         if event.type == pygame.KEYUP:
