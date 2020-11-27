@@ -18,7 +18,7 @@ background_image = pygame.image.load('./assets/background.png')
 
 # Background sound
 mixer.music.load('./sounds/background.wav')
-mixer.music.play()
+mixer.music.play(-1)
 
 # Title and icon
 pygame.display.set_caption('Space Invadors')
@@ -54,6 +54,12 @@ def reset_monster(index):
     monster_position_x[index] = randint(0,window_width-monster_image_with)
     monster_position_y[index] = randint(0,3) * monster_image_height
     monster_x_speed[index] *= -1
+
+def hide_monster(index):
+    global monster_position_x
+    global monster_position_y
+    monster_position_x[index] = window_width*2
+    monster_position_y[index] = window_height*2
 
 for i in range(number_monster):
     reset_monster(i)
@@ -111,6 +117,7 @@ def distance(point_a, point_b):
 def is_collition(invader_position, bullet_position):
     return distance(invader_position,bullet_position) < 20
 
+# Score
 score = 0
 font = pygame.font.Font('freesansbold.ttf',32)
 score_coordinates = (10,10)
@@ -122,6 +129,18 @@ def show_score():
 def increase_score():
     global score
     score += 1
+
+# Game over text
+score = 0
+game_over_font = pygame.font.Font('freesansbold.ttf',64)
+
+def game_over():
+    game_over_render = game_over_font.render('GAME OVER',True,(252, 223, 3))
+    text_width = game_over_render.get_width()
+    text_height = game_over_render.get_height()
+    game_over_coordinates = ((window_width - text_width)/2, (window_height - text_height)/2)
+    screen.blit(game_over_render,game_over_coordinates)
+    mixer.music.stop()
 
 running = True
 while running:
@@ -159,10 +178,20 @@ while running:
 
     # Monster movement
     for i in range(number_monster):
+        # x movement
         monster_position_x[i] += monster_x_speed[i]
+        # y movement
         if monster_position_x[i] < left_limit or monster_position_x[i] > right_limit:
             monster_x_speed[i] *= -1
             monster_position_y[i] += monster_y_speed
+
+        # Game over
+        if monster_position_y[i] > player_position_y:
+            for j in range(number_monster):
+                hide_monster(j)
+            game_over()
+            break
+
         # Collition
         if is_collition(monster_position(i),bullet_position()):
             # Collition sound
